@@ -35,9 +35,10 @@ namespace glz::detail
    template <uint32_t N, class B>
    GLZ_ALWAYS_INLINE void maybe_pad(B& b, auto& ix) noexcept
    {
+      using C = std::decay_t<decltype(b.size() + N + ix)>;
       if constexpr (vector_like<B>) {
          if (const auto k = ix + N; k > b.size()) [[unlikely]] {
-            b.resize((std::max)(b.size() * 2, k));
+            b.resize((std::max)(static_cast<C>(b.size()) * 2, static_cast<C>(k)));
          }
       }
    }
